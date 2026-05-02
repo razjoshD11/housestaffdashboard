@@ -179,6 +179,12 @@ def main():
             else:
                 annualized = 0.0
                 note = "No quarters of pay"
+            title_u = (data["title"] or "").upper()
+            is_part_time_title = any(kw in title_u for kw in [
+                "INTERN", "FELLOW", "TEMP", "PART-TIME", "PART TIME", "PARTTIME",
+                "PAGE", "DETAILEE", "ON-CALL", "ON CALL"
+            ])
+            full_time = (annualized >= 35000) and not is_part_time_title
             staff_list.append({
                 "name": flip_name(emp_name),
                 "title": data["title"].title() if data["title"] else "",
@@ -187,6 +193,7 @@ def main():
                 "quarters_paid": qs,
                 "n_quarters_paid": n_qs,
                 "note": note,
+                "full_time": full_time,
             })
         staff_list.sort(key=lambda x: x["annualized_salary"], reverse=True)
 
@@ -232,6 +239,7 @@ def main():
             key=lambda x: x["amount"], reverse=True
         )
 
+        full_time_count = sum(1 for s in staff_list if s["full_time"])
         out_members.append({
             "name": t["name"],
             "city": t["city"],
@@ -243,6 +251,7 @@ def main():
                 "office_total": round(office_total, 2),
                 "travel_total": round(travel_total, 2),
                 "other_total": round(total_spent - total_staff_spend - office_total - travel_total, 2),
+                "full_time_staff": full_time_count,
             },
             "staff": staff_list,
             "top_other": top5_other,

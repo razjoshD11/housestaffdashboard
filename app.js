@@ -59,8 +59,6 @@ function renderHome() {
   return `
     <section class="hero">
       <div class="wrap">
-        <h1>How big-city Democrats spend their House office budget.</h1>
-        <p class="lede">Every quarter, the U.S. House publishes a Statement of Disbursements showing every dollar each Member of Congress spent — staff salaries, office rent, travel, the works. This dashboard pulls 2025 data for Democrats representing the seven largest American cities and lays it bare: who they pay, what they pay them, and where the rest of the money goes.</p>
         <div class="hero-stats">
           <div class="stat"><span class="stat-num">${DATA.members.length}</span><div class="stat-label">Members</div></div>
           <div class="stat"><span class="stat-num">${cities}</span><div class="stat-label">Cities</div></div>
@@ -193,6 +191,7 @@ function renderMember(m) {
   const t = m.totals;
   const maxQ = Math.max(...m.quarterly.map(q => q.amount || 0)) || 1;
   const maxCat = Math.max(...m.category_breakdown.map(c => c.amount || 0)) || 1;
+  const ftStaff = m.staff.filter(s => s.full_time);
 
   return `
     <div class="member-detail">
@@ -208,8 +207,13 @@ function renderMember(m) {
           </div>
         </div>
 
-        <div class="totals-row">
+        <div class="totals-row totals-row-6">
           <div class="total-card primary">
+            <div class="total-label">Full-Time Staff</div>
+            <div class="total-num">${t.full_time_staff || 0}</div>
+            <div class="total-sub">est. ≥ $35k annualized</div>
+          </div>
+          <div class="total-card">
             <div class="total-label">Total 2025 Spend</div>
             <div class="total-num">${fmtUSD(t.total_spend)}</div>
           </div>
@@ -218,7 +222,7 @@ function renderMember(m) {
             <div class="total-num">${fmtUSD(t.staff_total)}</div>
           </div>
           <div class="total-card">
-            <div class="total-label">Office (rent, supplies, print)</div>
+            <div class="total-label">Office</div>
             <div class="total-num">${fmtUSD(t.office_total)}</div>
           </div>
           <div class="total-card">
@@ -248,8 +252,8 @@ function renderMember(m) {
         <div class="detail-grid">
           <div>
             <div class="panel">
-              <h3>Staff (${m.staff.length})</h3>
-              <div class="panel-sub">Annualized salaries are total 2025 pay. Where a person is on payroll fewer than 4 quarters, salary is estimated by extrapolating their pay across 12 months.</div>
+              <h3>Full-time staff (${ftStaff.length})</h3>
+              <div class="panel-sub">Estimated full-time = annualized salary ≥ $35,000 with a non-intern title. Annualized salaries are total 2025 pay; where a person is on payroll fewer than 4 quarters, salary is extrapolated across 12 months.</div>
               <table class="staff">
                 <thead><tr>
                   <th>Name / Title</th>
@@ -258,7 +262,7 @@ function renderMember(m) {
                   <th class="num">Paid 2025</th>
                 </tr></thead>
                 <tbody>
-                  ${m.staff.map(s => `
+                  ${ftStaff.map(s => `
                     <tr>
                       <td>
                         <div class="staff-name">${escape(s.name)}</div>
