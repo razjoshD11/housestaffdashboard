@@ -243,7 +243,7 @@ def main():
         "city_summary": city_summary,
     }
 
-    out_path = Path(__file__).resolve().parents[1] / "site" / "data.json"
+    out_path = Path(__file__).resolve().parents[1] / "data.json"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     with open(out_path, "w") as f:
         json.dump(out, f, indent=2)

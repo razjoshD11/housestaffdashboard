@@ -14,18 +14,18 @@ U.S. House [Statement of Disbursements](https://www.house.gov/the-house-explaine
 python3 scripts/build_data.py
 ```
 
-Reads four CSVs from `~/Downloads/` and emits `site/data.json` consumed by the static dashboard in `site/`.
+Reads four CSVs from `~/Downloads/` and emits `data.json` consumed by the static dashboard at the repo root.
 
 ## Local preview
 
 ```bash
-cd site && python3 -m http.server 8000
+python3 -m http.server 8000
 # open http://localhost:8000
 ```
 
 ## Methodology
 
-See the **Methodology** link in the site header, or `site/app.js` `renderMethodology()`.
+See the **Methodology** link in the site header, or `app.js` `renderMethodology()`.
 
 Short version:
 - Only `SORT SEQUENCE = DETAIL` rows are summed (subtotals excluded).
