@@ -57,6 +57,28 @@ def org_to_target_idx(org):
     return None
 
 
+SUFFIXES = {"JR", "SR", "II", "III", "IV"}
+
+
+def flip_name(s):
+    """Convert SOD 'LAST FIRST M.' to 'First M. Last', preserving suffixes (Jr., II)."""
+    s = (s or "").strip()
+    if not s:
+        return s
+    tokens = s.split()
+    suffix = None
+    if tokens and tokens[-1].rstrip(".").upper() in SUFFIXES:
+        suffix = tokens.pop()
+    if not tokens:
+        return s.title()
+    last = tokens[0]
+    rest = tokens[1:]
+    parts = rest + [last]
+    if suffix:
+        parts.append(suffix)
+    return " ".join(parts).title()
+
+
 def parse_amount(s):
     if s is None:
         return 0.0
@@ -158,7 +180,7 @@ def main():
                 annualized = 0.0
                 note = "No quarters of pay"
             staff_list.append({
-                "name": emp_name.title(),
+                "name": flip_name(emp_name),
                 "title": data["title"].title() if data["title"] else "",
                 "annualized_salary": round(annualized, 2),
                 "total_paid_2025": round(paid, 2),

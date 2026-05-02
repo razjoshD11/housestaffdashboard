@@ -25,10 +25,8 @@ python3 -m http.server 8000
 
 ## Methodology
 
-See the **Methodology** link in the site header, or `app.js` `renderMethodology()`.
-
-Short version:
 - Only `SORT SEQUENCE = DETAIL` rows are summed (subtotals excluded).
 - **Staff** = `PERSONNEL COMPENSATION`. **Office** = rent + supplies + printing. **Travel** = `TRAVEL`. **Other** = everything else.
 - Salaries are annualized: full year if paid all 4 quarters, otherwise extrapolated by months on payroll with a flag.
 - Top-5 "other" expenses exclude staff, office, and travel.
+- Staff names are stored "LAST FIRST M." in the source SOD; the ETL flips them to "First M. Last".

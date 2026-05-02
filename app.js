@@ -37,10 +37,6 @@ function route() {
     bindHomeEvents();
     return;
   }
-  if (hash === '#/methodology') {
-    app.innerHTML = renderMethodology();
-    return;
-  }
   const m = hash.match(/^#\/member\/(.+)$/);
   if (m) {
     const slug = decodeURIComponent(m[1]);
@@ -315,59 +311,6 @@ function renderMember(m) {
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  `;
-}
-
-/* METHODOLOGY */
-function renderMethodology() {
-  return `
-    <div class="wrap">
-      <div class="methodology">
-        <a href="#/" class="member-back">← Back</a>
-        <h2>Methodology</h2>
-        <p>This dashboard compiles 2025 data from the U.S. House <strong>Statement of Disbursements (SOD)</strong>, the official quarterly publication of every dollar paid out of each Member office's <strong>Members' Representational Allowance (MRA)</strong>.</p>
-
-        <h3>Source</h3>
-        <p>Four quarterly detail-grid CSVs published by the House Chief Administrative Officer:</p>
-        <ul>
-          <li>January–March 2025 SOD Detail Grid</li>
-          <li>April–June 2025 SOD Detail Grid</li>
-          <li>July–September 2025 SOD Detail Grid</li>
-          <li>October–December 2025 SOD Detail Grid</li>
-        </ul>
-
-        <h3>Member selection</h3>
-        <p>Democratic Members of the U.S. House whose districts contain any part of the city limits of <strong>San Francisco, Los Angeles, New York City, Miami, Chicago, Seattle, or Boston</strong>. Where a city is split across many Democratic districts (NYC, LA, Chicago), every Democratic member with district territory inside the city is included.</p>
-
-        <h3>Categories</h3>
-        <ul>
-          <li><strong>Staff</strong> = <code>PERSONNEL COMPENSATION</code> rows.</li>
-          <li><strong>Office</strong> = <code>RENT, COMMUNICATION, UTILITIES</code> + <code>SUPPLIES AND MATERIALS</code> + <code>PRINTING AND REPRODUCTION</code>.</li>
-          <li><strong>Travel</strong> = <code>TRAVEL</code> rows.</li>
-          <li><strong>Other</strong> = everything else (typically <code>OTHER SERVICES</code>, <code>FRANKED MAIL</code>, miscellaneous categories).</li>
-        </ul>
-        <p>Only rows with <code>SORT SEQUENCE = DETAIL</code> are summed. Subtotal and grand-total rows are excluded so totals are not double-counted.</p>
-
-        <h3>Annualized salary</h3>
-        <p>For each staff name appearing in personnel-compensation rows, all 2025 payments are summed.</p>
-        <ul>
-          <li>If the staffer received pay in <strong>all 4 quarters</strong>, the sum is reported directly as the annualized salary (full year on payroll).</li>
-          <li>If they received pay in <strong>fewer than 4 quarters</strong>, the salary is estimated by extrapolating the per-quarter rate across 12 months: <code>(total paid ÷ months on payroll) × 12</code>, where each quarter equals 3 months. These rows are flagged with an "Estimated" note.</li>
-        </ul>
-        <p>This means a person who joined mid-year and earned $50,000 across two quarters is reported as having an annualized rate of $100,000, not $50,000. Total-paid-in-2025 is also shown unmodified for transparency.</p>
-
-        <h3>Caveats</h3>
-        <ul>
-          <li>Staff counts reflect <em>distinct names that appeared on payroll at any point in 2025</em>, not headcount at a single moment. Turnover inflates the count above any office's true point-in-time staff size.</li>
-          <li>"Title" reflects the most recent title attached to that name in the SOD detail.</li>
-          <li>Some categories such as <code>FRANKED MAIL</code> are reimbursed on different cycles and may show large one-time charges.</li>
-          <li>Negative amounts (refunds, corrections) are netted into category totals.</li>
-        </ul>
-
-        <h3>Source code</h3>
-        <p>The Python ETL that produces <code>data.json</code> from the four SOD CSVs is in this repo under <code>scripts/build_data.py</code>.</p>
       </div>
     </div>
   `;
